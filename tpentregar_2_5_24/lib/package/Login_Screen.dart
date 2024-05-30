@@ -1,55 +1,67 @@
+
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
-
-void main() {
-  runApp(LoginScreen());
-}
-
 class LoginScreen extends StatelessWidget {
-  static const String name = 'login';
-  LoginScreen({super.key});
-  TextEditingController username = TextEditingController();
-  TextEditingController password = TextEditingController();
+  const LoginScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-
-        body: Center(
-
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              ElevatedButton(
-              onPressed: () {
-                if (username.text == 'Rafa&Eze' && password.text == 'brawlstars') {
-                  print('Login Success');
-                  context.push('/home');
-                } else {
-                  print('Login Failed');
-                }
-              },
-              child: const Text('Login'),
-              ),
-             TextField(
-              controller: username,
+    TextEditingController passController = TextEditingController();
+    TextEditingController userController = TextEditingController();
+    return MaterialApp(
+      home: Scaffold(
+        body: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              controller: userController,
               decoration: const InputDecoration(
                 hintText: 'Username',
                 icon: Icon(Icons.person_2_outlined),
-             ),
+              ),
             ),
-
-             TextField(
-              controller: password,
+            TextField(
+              controller: passController,
               decoration: const InputDecoration(
                 hintText: 'Password',
                 icon: Icon(Icons.lock_clock_outlined),
               ),
               obscureText: true,
             ),
+            ElevatedButton(
+              onPressed: () {
+                String userInput = userController.text;
+                String passInput = passController.text;
+
+                List<String> users = ['Rafa', 'Eze', 'SachoLindo', 'GabyGay'];
+                List<String> passwords = ['Rafafa', 'Ezzze', 'Sachincli', 'Mechanic_gaby'];
+
+                if (userInput.isEmpty || passInput.isEmpty) {
+                  SnackBar snackBarVacio =
+                      const SnackBar(content: Text('Login correcto'));
+                  ScaffoldMessenger.of(context).showSnackBar(snackBarVacio);
+                  return;
+                }
+                if ((users.contains(userInput))) {
+                  if (passwords.contains(passInput) &&
+                      passInput == passwords[passwords.indexOf(userInput)]) {
+                    SnackBar snackBar =
+                        const SnackBar(content: Text('Login correcto'));
+                    ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                    context.push('/homeScreen', extra: userInput);
+                  }
+                } else {
+                  SnackBar snackBarIncorrecto =
+                      const SnackBar(content: Text('Login correcto'));
+                  ScaffoldMessenger.of(context)
+                      .showSnackBar(snackBarIncorrecto);
+                }
+              },
+              child: const Text('Login'),
+            ),
           ],
         ),
       ),
-      );
-   
+    );
   }
 }
